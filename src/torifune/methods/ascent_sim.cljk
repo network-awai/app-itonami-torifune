@@ -23,13 +23,11 @@
 (def ^:private tok-re
   #"[\s,]+|;[^\n]*|(\[|\]|\{|\}|\"(?:\\.|[^\"\\])*\"|[^\s,\[\]{}]+)")
 
-(defn tokens [s]
-  (let [m (re-matcher tok-re s)]
-    ((fn step []
-       (lazy-seq
-        (when (.find m)
-          (let [t (.group m 1)]
-            (if (nil? t) (step) (cons t (step))))))))))
+(defn tokens
+  "Successive group-1 captures of tok-re (separators and comments have none). re-seq
+  instead of a java.util.regex.Matcher keeps this portable to ClojureScript (AWAI-3502)."
+  [s]
+  (keep second (re-seq tok-re s)))
 
 (defn atom-of [t]
   (cond
@@ -42,10 +40,10 @@
     (= t "nil") nil
     (str/starts-with? t ":") t
     :else
-    (let [as-long (try (Long/parseLong t) (catch #?(:clj Exception :cljs :default) _ ::nan))]
+    (let [as-long #?(:clj (try (Long/parseLong t) (catch Exception _ ::nan)) :cljs (if-some [n (parse-long t)] n ::nan))]
       (if (not= as-long ::nan)
         as-long
-        (let [as-dbl (try (Double/parseDouble t) (catch #?(:clj Exception :cljs :default) _ ::nan))]
+        (let [as-dbl #?(:clj (try (Double/parseDouble t) (catch Exception _ ::nan)) :cljs (if-some [d (parse-double t)] d ::nan))]
           (if (not= as-dbl ::nan) as-dbl t))))))
 
 (def ^:private end-marker ::end)
@@ -160,7 +158,7 @@
     {:per_stage per-stage :total_dv_ms total-dv :required_dv_ms required
      :dv_margin_ms (- total-dv required) :payload_kg payload-kg :target_regime target}))
 
-(defn- fmt0 [v] (format "%.0f" (double v)))
+(defn- fmt0 [v] (str/format "%.0f" (double v)))
 (defn- lstrip-colon [s] (if (and (string? s) (str/starts-with? s ":")) (subs s 1) s))
 
 (defn report-md [_nodes _edges res]
@@ -183,7 +181,7 @@
       (conj! L (str "| " (:label s) " | " (fmt0 (:isp_s s)) " | " (fmt0 (:m0_kg s)) " | "
                     (fmt0 (:mf_kg s)) " | " (fmt0 (:dv_ms s)) " |")))
     (conj! L (str "| **total** | | | | **" (fmt0 (:total_dv_ms res)) "** |"))
-    (conj! L (str "\n**Δv margin to " tgt ": " (format "%+.0f" (double margin)) " m/s** — " verdict
+    (conj! L (str "\n**Δv margin to " tgt ": " (str/format "%+.0f" (double margin)) " m/s** — " verdict
                   " (reusable reserve folds into this margin).\n"))
     (conj! L (str "\n---\n_torifune 鳥船 · ADR-2606162355 · civilian-launch-only · "
                   "weapon-unrepresentable · zero-net-carbon · representative estimates. Actual "
@@ -207,6 +205,6 @@
        (println (str "torifune: " (count nodes) " nodes, " (count edges) " 縁 → "
                      (clojure.java.io/file outdir "ascent-report.md")))
        (println (str "  total Δv " (fmt0 (:total_dv_ms res)) " m/s, margin "
-                     (format "%+.0f" (double (:dv_margin_ms res))) " m/s to "
+                     (str/format "%+.0f" (double (:dv_margin_ms res))) " m/s to "
                      (lstrip-colon (or (:target_regime res) "—"))))
        0)))
