@@ -28,7 +28,7 @@
              missions)]
     {:missions out :total_deorbit_debt (reduce + 0.0 (map :deorbit_debt out))}))
 
-(defn- fmtg [v] (let [d (double v)] (if (== d (Math/rint d)) (str (long d)) (str d))))
+(defn- fmtg [v] (let [d (double v)] (if (== d #?(:clj (Math/rint d) :cljs (js/Math.round d))) (str (long d)) (str d))))
 
 (defn emit-edn [res]
   (let [L (transient [])]

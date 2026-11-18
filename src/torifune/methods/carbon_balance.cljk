@@ -33,8 +33,8 @@
     {:rows rows :net_kgco2e net :used_disfavored used-disfavored
      :g2_pass (and (<= net 0.0) (empty? used-disfavored))}))
 
-(defn- fmt0 [v] (format "%.0f" (double v)))
-(defn- fmtg [v] (let [d (double v)] (if (== d (Math/rint d)) (str (long d)) (str d))))
+(defn- fmt0 [v] (str/format "%.0f" (double v)))
+(defn- fmtg [v] (let [d (double v)] (if (== d #?(:clj (Math/rint d) :cljs (js/Math.round d))) (str (long d)) (str d))))
 (defn- lstrip-colon [s] (if (and (string? s) (str/starts-with? s ":")) (subs s 1) s))
 
 (defn report-md [_nodes _edges res]
