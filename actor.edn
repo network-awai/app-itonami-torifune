@@ -1,7 +1,7 @@
-{:did        "did:web:etzhayyim.github.io:com-etzhayyim-torifune"
- :handle     "torifune.etzhayyim.com"
+{:did        "did:web:itonami.github.io:app-itonami-torifune"
+ :handle     "torifune.itonami.cloud"
  :ipns-key   "torifune-actor"
- :graph-type "com.etzhayyim.torifune.graph"
+ :graph-type "cloud.itonami.torifune.graph"
  :published  "2026-06-28"
  :bundle [["data" "data"]
           [".well-known/did.json" "did.json"]

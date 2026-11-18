@@ -22,7 +22,7 @@ ipfs add --cid-version=1 --raw-leaves dist/torifune.wasm > dist/torifune.cid
 node ../tsumugi/wasm/loader/verify.mjs dist/torifune.wasm   # headless CID re-verify
 ```
 
-Advertise the CID in the actor's `did.json` as an `EtzhayyimWasmComponent` service via the apex
+Advertise the CID in the actor's `did.json` as an `ItonamiWasmComponent` service via the apex
 Worker `:actor/wasm-cid` (ADR-2606013800). The component is read-only + dry-run — it cannot fly
 hardware (G1/G6). This leg is **safe to do on attestation of this runbook**.
 
@@ -40,7 +40,7 @@ hardware (G1/G6). This leg is **safe to do on attestation of this runbook**.
    handed to `hoshimori` stewardship; torifune may not add to the congestion hoshimori routes
    around.
 5. **G6 no-server-key** — flight commanded by the operator's own key/ground segment, never an
-   etzhayyim-operated Worker/pod/CI/bot; the actor component issues no guidance and commands no
+   itonami-operated Worker/pod/CI/bot; the actor component issues no guidance and commands no
    hardware.
 6. **G8 sourcing honesty** — pre-campaign numbers are representative estimates; only post-flight
    telemetry under the operator's authority is `:authoritative`.

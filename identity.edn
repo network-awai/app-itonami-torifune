@@ -1,1 +1,1 @@
-{:repository/id "etzhayyim/com-etzhayyim-torifune" :actor/id "torifune" :canonical-format :edn}
+{:repository/id "itonami/app-itonami-torifune" :actor/id "torifune" :canonical-format :edn}
