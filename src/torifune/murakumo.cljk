@@ -3,7 +3,7 @@
   (:require [kotoba.lang.text :as str]))
 
 (def actor-did
-  "did:web:torifune.etzhayyim.com")
+  "did:web:torifune.itonami.cloud")
 
 (def common-gates
   [:council-charter-attestation
@@ -16,7 +16,7 @@
 
 (defn collection
   [name]
-  (str "com.etzhayyim.torifune." name))
+  (str "cloud.itonami.torifune." name))
 
 (def cell-specs {
   :ascent-sim {:legacy-cell "cell-torifune-ascent-sim"

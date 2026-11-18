@@ -3,7 +3,7 @@
 Design for running torifune's launch-vehicle sim as a **kotoba pywasm actor** under the
 "one Worker, many WASM actors" model (ADR-2606014500 / 2606014600), identical in shape to
 hoshimori (ADR-2606073600) and the funadaiku build-pattern lineage. The only first-party
-Cloudflare Worker is `etzhayyim.com` (identity / `did.json`); the actor is a
+Cloudflare Worker is `itonami.cloud` (identity / `did.json`); the actor is a
 **content-addressed WASM component** fetched from IPFS and run **locally** (browser via
 ameno, or the donated mesh via e7m-wasm-runner) — **no per-actor server** (no-server-key).
 
@@ -25,7 +25,7 @@ represent a strike profile is not a weapon.
 ## Component ABI (WIT sketch)
 
 ```wit
-package etzhayyim:torifune@0.1.0;
+package itonami:torifune@0.1.0;
 
 world torifune-actor {
   /// staged Δv budget + margin to the embedded mission's target regime (civilian only).
@@ -56,7 +56,7 @@ ipfs add --cid-version=1 --raw-leaves dist/torifune.wasm > dist/torifune.cid
 node ../../tsumugi/wasm/loader/verify.mjs dist/torifune.wasm   # reuse headless CID-verify path
 ```
 
-The CID is advertised in the actor's `did.json` as an `EtzhayyimWasmComponent` service,
+The CID is advertised in the actor's `did.json` as an `ItonamiWasmComponent` service,
 issued dynamically by the apex Worker (ADR-2606013800) from `:actor/wasm-cid`.
 
 ## Trust model
